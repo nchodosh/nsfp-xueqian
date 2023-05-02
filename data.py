@@ -11,6 +11,7 @@ from av2.evaluation.scene_flow.utils import (get_eval_point_mask,
                                              write_output_file)
 from av2.torch.data_loaders.scene_flow import SceneFlowDataloader
 from torch.utils.data import Dataset
+from tqdm import tqdm
 
 
 class FlyingThings3D(Dataset):
@@ -369,6 +370,9 @@ class Argoverse2SceneFlowDataset(Dataset):
             shuffle(self.inds)
             self.inds = self.inds[:subset_size]
         self.datapath = [None] * len(self.inds)
+        for i in tqdm(list(range(len(self.inds)))):
+            s0, _, _, _ = self.data_loader[self.inds[i]]
+            self.datapath[i] = f'{s0.sweep_uuid[0]}-{s0.sweep_uuid[1]}'
 
             
     def __len__(self):
@@ -376,7 +380,6 @@ class Argoverse2SceneFlowDataset(Dataset):
     
     def __getitem__(self, index):
         s0, s1, ego1_SE3_ego0, flow_obj = self.data_loader[self.inds[index]]
-        self.datapath[index] = f'{s0.sweep_uuid[0]}-{s0.sweep_uuid[1]}'
         pcl_0 = s0.lidar.as_tensor()[:, :3]
         pcl_1 = s1.lidar.as_tensor()[:, :3]
         flow = flow_obj.flow if flow_obj is not None else None
