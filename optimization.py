@@ -13,8 +13,9 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 import config
-from data import (ArgoverseSceneFlowDataset, FlyingThings3D,
-                  KITTISceneFlowDataset, NuScenesSceneFlowDataset)
+from data import (Argoverse2SceneFlowDataset, ArgoverseSceneFlowDataset,
+                  FlyingThings3D, KITTISceneFlowDataset,
+                  NuScenesSceneFlowDataset)
 from loss import my_chamfer_fn
 from model import Neural_Prior
 from utils import EarlyStopping, GeneratorWrap, Timers, scene_flow_metrics
