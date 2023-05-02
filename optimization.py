@@ -277,7 +277,7 @@ if __name__ == "__main__":
         )
     elif options.dataset == "Argoverse2SceneFlowDataset":
         data_loader = DataLoader(
-            ArgoverseSceneFlowDataset(options=options, partition=options.partition),
+            Argoverse2SceneFlowDataset(options=options, partition=options.partition),
             batch_size=options.batch_size, shuffle=False, drop_last=False, num_workers=12
         )
     elif options.dataset == "NuScenesSceneFlowDataset":
