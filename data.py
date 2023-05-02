@@ -376,7 +376,7 @@ class Argoverse2SceneFlowDataset(Dataset):
     
     def __getitem__(self, index):
         s0, s1, ego1_SE3_ego0, flow_obj = self.data_loader[self.inds[index]]
-        self.datapath[index] = f'{s0.sweep_uuid[0]}-{s0.sqeep_uuid[1]}'
+        self.datapath[index] = f'{s0.sweep_uuid[0]}-{s0.sweep_uuid[1]}'
         pcl_0 = s0.lidar.as_tensor()[:, :3]
         pcl_1 = s1.lidar.as_tensor()[:, :3]
         flow = flow_obj.flow if flow_obj is not None else None
