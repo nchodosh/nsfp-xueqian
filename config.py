@@ -45,7 +45,7 @@ def add_config(parser):
     parser.add_argument('--seed', type=int, default=1234, metavar='S', help='Random seed (default: 1234).')
     parser.add_argument('--dataset', type=str, default='KITTISceneFlowDataset',
                         choices=['FlyingThings3D', 'KITTISceneFlowDataset', 'ArgoverseSceneFlowDataset', 
-                                 'NuScenesSceneFlowDataset'], metavar='N',
+                                 'NuScenesSceneFlowDataset', 'Argoverse2SceneFlowDataset'], metavar='N',
                         help='Dataset to use.')
     parser.add_argument('--dataset_path', type=str, default='./dataset/kitti', metavar='N',
                         help='Dataset path.')
@@ -63,3 +63,4 @@ def add_config(parser):
     parser.add_argument('--act_fn', type=str, default='relu', metavar='AF', help='activation function for neural prior.')
     parser.add_argument('--backward_flow', action='store_true', default=True, help='use backward flow or not.')
     parser.add_argument('--early_patience', type=int, default=100, help='patience in early stopping.')
+    parser.add_argument('--subset', type=int, default=100, help='only optimize a subset of results.')

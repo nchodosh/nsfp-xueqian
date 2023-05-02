@@ -1,9 +1,9 @@
 """optimize over a network structure."""
 
 import argparse
+import copy
 import logging
 import os
-import copy
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -13,14 +13,14 @@ import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from model import Neural_Prior
 import config
-from data import (ArgoverseSceneFlowDataset, KITTISceneFlowDataset,
-                  NuScenesSceneFlowDataset, FlyingThings3D)
-from utils import scene_flow_metrics, Timers, GeneratorWrap, EarlyStopping
+from data import (ArgoverseSceneFlowDataset, FlyingThings3D,
+                  KITTISceneFlowDataset, NuScenesSceneFlowDataset)
 from loss import my_chamfer_fn
-from visualize import show_flows, flow_to_rgb, custom_draw_geometry_with_key_callback
-
+from model import Neural_Prior
+from utils import EarlyStopping, GeneratorWrap, Timers, scene_flow_metrics
+from visualize import (custom_draw_geometry_with_key_callback, flow_to_rgb,
+                       show_flows)
 
 device = torch.device("cuda:0")
 
@@ -269,6 +269,11 @@ if __name__ == "__main__":
             batch_size=options.batch_size, shuffle=False, drop_last=False, num_workers=12
         )
     elif options.dataset == "ArgoverseSceneFlowDataset":
+        data_loader = DataLoader(
+            ArgoverseSceneFlowDataset(options=options, partition=options.partition),
+            batch_size=options.batch_size, shuffle=False, drop_last=False, num_workers=12
+        )
+    elif options.dataset == "Argoverse2SceneFlowDataset":
         data_loader = DataLoader(
             ArgoverseSceneFlowDataset(options=options, partition=options.partition),
             batch_size=options.batch_size, shuffle=False, drop_last=False, num_workers=12

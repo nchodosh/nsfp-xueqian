@@ -1,8 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 import glob
+from random import seed, shuffle
+
 import numpy as np
+import torch
+from av2.evaluation.scene_flow.utils import (get_eval_point_mask,
+                                             get_eval_subset,
+                                             write_output_file)
+from av2.torch.data_loaders.scene_flow import SceneFlowDataloader
 from torch.utils.data import Dataset
 
 
@@ -347,3 +353,41 @@ class NuScenesSceneFlowDataset(Dataset):
     def __len__(self):
         return len(self.datapath)
 
+
+class Argoverse2SceneFlowDataset(Dataset):
+    def __init__(self, options, partition='val', width=1):
+        self.options = options
+        self.partition = partition
+        self.width = width
+
+        self.data_loader = SceneFlowDataloader(self.options.dataset_path, "av2", partition)
+        self.inds = get_eval_subset(data_loader)
+        subset_size = self.options.subset
+        if subset_size > 0:
+            seed(0)
+            shuffle(self.inds)
+            self.inds = self.inds[:subset_size]
+
+            
+    def __len__(self):
+        return len(self.inds)
+    
+    def __getitem__(self, index):
+        s0, s1, ego1_SE3_ego0, flow_obj = self.data_loader[self.inds[index]]
+        filename = self.datapath[index]
+
+        pcl_0 = s0.lidar.as_tensor()[:, :3]
+        pcl_1 = s1.lidar.as_tensor()[:, :3]
+        flow = flow_obj.flow if flow_obj is not None else None
+        mask0 = get_eval_point_mask(s0.sweep_uuid, Path(mask_file))
+        mask1 = torch.logical_and(
+            torch.logical_and((pcl_1[:, 0].abs() <= 50), (pcl_1[:, 1].abs() <= 50)).bool(),
+            torch.logical_not(s1.is_ground),
+        )
+
+        pcl_1 = pcl_1[mask1]
+        pcl_0 = pcl_0[mask0]
+        if flow is not None:
+            flow = flow[mask0]
+
+        return pcl_0, pcl_1, flow
