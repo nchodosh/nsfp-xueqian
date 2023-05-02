@@ -224,8 +224,8 @@ def optimize_neural_prior(options, data_loader):
         logging.info(timers.print())
 
     df = pd.DataFrame(outputs)
-    df.loc['mean'] = df.mean()
-    logging.info(df.mean())
+    df.loc['mean'] = df.mean(numeric_only=True)
+    logging.info(df.mean(numeric_only=True))
     df.loc['total time'] = time_avg
     df.to_csv('{:}.csv'.format(f"{save_dir_path}/results"))
 
