@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import glob
+from pathlib import Path
 from random import seed, shuffle
 
 import numpy as np
@@ -377,7 +378,10 @@ class Argoverse2SceneFlowDataset(Dataset):
         pcl_0 = s0.lidar.as_tensor()[:, :3]
         pcl_1 = s1.lidar.as_tensor()[:, :3]
         flow = flow_obj.flow if flow_obj is not None else None
-        mask0 = get_eval_point_mask(s0.sweep_uuid, Path(mask_file))
+        mask0 = torch.logical_and(
+            torch.logical_and((pcl_1[:, 0].abs() <= 50), (pcl_1[:, 1].abs() <= 50)).bool(),
+            torch.logical_not(s1.is_ground),
+        )
         mask1 = torch.logical_and(
             torch.logical_and((pcl_1[:, 0].abs() <= 50), (pcl_1[:, 1].abs() <= 50)).bool(),
             torch.logical_not(s1.is_ground),
