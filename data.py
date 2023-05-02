@@ -361,7 +361,7 @@ class Argoverse2SceneFlowDataset(Dataset):
         self.width = width
 
         self.data_loader = SceneFlowDataloader(self.options.dataset_path, "av2", partition)
-        self.inds = get_eval_subset(data_loader)
+        self.inds = get_eval_subset(self.data_loader)
         subset_size = self.options.subset
         if subset_size > 0:
             seed(0)
