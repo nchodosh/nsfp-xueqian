@@ -18,8 +18,6 @@ from data import (ArgoverseSceneFlowDataset, FlyingThings3D,
 from loss import my_chamfer_fn
 from model import Neural_Prior
 from utils import EarlyStopping, GeneratorWrap, Timers, scene_flow_metrics
-from visualize import (custom_draw_geometry_with_key_callback, flow_to_rgb,
-                       show_flows)
 
 device = torch.device("cuda:0")
 
@@ -153,6 +151,10 @@ def solver(
 
     # NOTE: visualization
     if options.visualize:
+        import open3d as o3d
+
+        from visualize import (custom_draw_geometry_with_key_callback,
+                               flow_to_rgb, show_flows)
         fig = plt.figure(figsize=(13, 5))
         ax = fig.gca()
         ax.plot(total_losses, label="loss")
@@ -164,7 +166,7 @@ def solver(
 
         idx = 0   
         show_flows(pc1[idx], pc2[idx], best_flow_1[idx])
-        import open3d as o3d
+
 
         # ANCHOR: new plot style
         pc1_o3d = o3d.geometry.PointCloud()
