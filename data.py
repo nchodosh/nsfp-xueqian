@@ -379,8 +379,8 @@ class Argoverse2SceneFlowDataset(Dataset):
         pcl_1 = s1.lidar.as_tensor()[:, :3]
         flow = flow_obj.flow if flow_obj is not None else None
         mask0 = torch.logical_and(
-            torch.logical_and((pcl_1[:, 0].abs() <= 50), (pcl_1[:, 1].abs() <= 50)).bool(),
-            torch.logical_not(s1.is_ground),
+            torch.logical_and((pcl_0[:, 0].abs() <= 50), (pcl_0[:, 1].abs() <= 50)).bool(),
+            torch.logical_not(s0.is_ground),
         )
         mask1 = torch.logical_and(
             torch.logical_and((pcl_1[:, 0].abs() <= 50), (pcl_1[:, 1].abs() <= 50)).bool(),
