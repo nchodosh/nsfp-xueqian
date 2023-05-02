@@ -371,8 +371,10 @@ class Argoverse2SceneFlowDataset(Dataset):
             self.inds = self.inds[:subset_size]
         self.datapath = [None] * len(self.inds)
         for i in list(range(len(self.inds))):
-            s0, _, _, _ = self.data_loader[self.inds[i]]
-            self.datapath[i] = f'{s0.sweep_uuid[0]}-{s0.sweep_uuid[1]}'
+            index = self.inds[i]
+            log = str(self.data_loader.file_index.loc[index, "log_id"])
+            ts = self.data_loader.file_index.loc[index, "timestamp_ns"]
+            self.datapath[i] = f'{log}-{ts}'
 
             
     def __len__(self):
