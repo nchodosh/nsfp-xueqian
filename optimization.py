@@ -7,7 +7,6 @@ import os
 
 import matplotlib.pyplot as plt
 import numpy as np
-import open3d as o3d
 import pandas as pd
 import torch
 from torch.utils.data import DataLoader
@@ -165,7 +164,8 @@ def solver(
 
         idx = 0   
         show_flows(pc1[idx], pc2[idx], best_flow_1[idx])
-        
+        import open3d as o3d
+
         # ANCHOR: new plot style
         pc1_o3d = o3d.geometry.PointCloud()
         colors_flow = flow_to_rgb(flow[0].cpu().numpy().copy())
