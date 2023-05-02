@@ -370,9 +370,9 @@ class Argoverse2SceneFlowDataset(Dataset):
             shuffle(self.inds)
             self.inds = self.inds[:subset_size]
         self.datapath = [None] * len(self.inds)
-        for i in tqdm(list(range(len(self.inds)))):
-            s0, _, _, _ = self.data_loader[self.inds[i]]
-            self.datapath[i] = f'{s0.sweep_uuid[0]}-{s0.sweep_uuid[1]}'
+        # for i in tqdm(list(range(len(self.inds)))):
+        #     s0, _, _, _ = self.data_loader[self.inds[i]]
+        #     self.datapath[i] = f'{s0.sweep_uuid[0]}-{s0.sweep_uuid[1]}'
 
             
     def __len__(self):
